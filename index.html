@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stopwatch</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #eae2b7;
+      color: #003049;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .stopwatch {
+      text-align: center;
+      background-color: #fcbf49;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .time {
+      font-size: 3em;
+      margin-bottom: 20px;
+    }
+
+    button {
+      background-color: #f77f00;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 20px;
+      font-size: 1em;
+      margin: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #d62828;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="stopwatch">
+    <div class="time" id="display">00:00:00</div>
+    <button onclick="start()">Start</button>
+    <button onclick="stop()">Stop</button>
+    <button onclick="reset()">Reset</button>
+  </div>
+
+  <script>
+    let timer;
+    let startTime;
+    let elapsedTime = 0;
+    let running = false;
+
+    function updateTime() {
+      const currentTime = Date.now();
+      const time = elapsedTime + (currentTime - startTime);
+      const seconds = Math.floor((time / 1000) % 60);
+      const minutes = Math.floor((time / (1000 * 60)) % 60);
+      const hours = Math.floor((time / (1000 * 60 * 60)) % 24);
+
+      document.getElementById('display').innerText = 
+        (hours < 10 ? '0' : '') + hours + ':' +
+        (minutes < 10 ? '0' : '') + minutes + ':' +
+        (seconds < 10 ? '0' : '') + seconds;
+    }
+
+    function start() {
+      if (!running) {
+        startTime = Date.now();
+        timer = setInterval(updateTime, 1000);
+        running = true;
+      }
+    }
+
+    function stop() {
+      if (running) {
+        elapsedTime += Date.now() - startTime;
+        clearInterval(timer);
+        running = false;
+      }
+    }
+
+    function reset() {
+      clearInterval(timer);
+      elapsedTime = 0;
+      running = false;
+      document.getElementById('display').innerText = "00:00:00";
+    }
+  </script>
+
+</body>
+</html>
